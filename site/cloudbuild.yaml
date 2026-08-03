@@ -1,0 +1,12 @@
+# Build the workshop hub image. Run from the REPO ROOT so the workshop markdown
+# is in the build context:
+#   gcloud builds submit --config site/cloudbuild.yaml \
+#     --substitutions=_IMAGE=us-central1-docker.pkg.dev/PROJECT/REPO/security-genie-site:TAG .
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "site/Dockerfile", "-t", "${_IMAGE}", "."]
+images:
+  - "${_IMAGE}"
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: E2_HIGHCPU_8

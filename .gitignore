@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Terraform — state holds generated passwords in plaintext
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+tfplan.json
+*.auto.tfvars
+terraform.tfvars
+
+# Secrets and credentials — never commit
+.env
+.env.*
+*.pem
+*.key
+*-key.json
+*credentials*.json
+application_default_credentials.json
+
+# Local tooling output
+.DS_Store
+*.log
+sast-results/

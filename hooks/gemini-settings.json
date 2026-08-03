@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "gcloud": {
+      "command": "npx",
+      "args": ["-y", "@google-cloud/gcloud-mcp"],
+      "env": {
+        "CLOUDSDK_ACTIVE_CONFIG_NAME": "default"
+      }
+    }
+  },
+  "hooks": {
+    "BeforeTool": [
+      {
+        "matcher": "run_shell_command|run_command|Bash|shell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .gemini/hooks/dangerous_command_guard.py"
+          }
+        ]
+      }
+    ]
+  }
+}

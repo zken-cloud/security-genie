@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Workshop hub{% endblock %}
+{% block content %}
+
+<h1>Security Genie</h1>
+<p class="lede">
+  A portable security-specialist harness and skill pack for coding agents —
+  Claude Code, Antigravity, Codex, Gemini CLI. It turns a general agent into a
+  Google Cloud platform security specialist that inspects real environments,
+  reviews architecture and Terraform, and prepares you for the customer's
+  security team.
+</p>
+
+<section class="tracks">
+  <article class="track primary">
+    <h2>Build your own</h2>
+    <p>Four labs. Each gives you a <strong>spec</strong> and a
+       <strong>self-gradeable acceptance test</strong> — not steps to copy.
+       You write the harness, the skills and the MCP wiring, then compare with
+       ours.</p>
+    <p class="meta">~3 hours · the workshop runs this track</p>
+    <a class="cta" href="{{ url_for('page', slug='labs') }}">Start with the labs →</a>
+  </article>
+  <article class="track">
+    <h2>Use ours</h2>
+    <p>Clone the repo and run <code>./install.sh</code>. A working genie in about
+       two minutes. Right choice if you have a customer engagement next week and
+       need the capability today.</p>
+    <p class="meta">~2 minutes</p>
+    <a class="cta" href="{{ url_for('page', slug='readme') }}">Repo overview →</a>
+  </article>
+</section>
+
+<h2>The four sessions</h2>
+<table class="sessions">
+  <thead><tr><th>#</th><th>Session</th><th>Min</th><th>What you build</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><a href="{{ url_for('page', slug='lab-1') }}">Harness &amp; MCP</a></td>
+      <td>30</td>
+      <td>Operating contract, gcloud + SecOps + GTI MCP, multi-account credentials, guard hook</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><a href="{{ url_for('page', slug='lab-2') }}">Architecture &amp; IaC skills</a></td>
+      <td>45</td>
+      <td>Well-architected, GCMVSP, Terraform least-privilege review and generation</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><a href="{{ url_for('page', slug='lab-3') }}">Conversation skills</a></td>
+      <td>45</td>
+      <td>Jargon translator, objection handling</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><a href="{{ url_for('page', slug='lab-4') }}">Genie at work</a></td>
+      <td>60</td>
+      <td>Flawed architecture → review → fixed IaC → smoke test → handover pack</td>
+    </tr>
+  </tbody>
+</table>
+<p class="why">
+  Sessions 2 and 3 exist for one reason each: a Platform CE handling a security
+  architecture review and sample code <em>without</em> engaging a platform
+  security CE, and handling the customer's security team directly.
+</p>
+
+<h2>Reference skills</h2>
+<p class="lede small">
+  The reference implementation — one defensible set of answers, not the answer.
+  Read these <em>after</em> you have written your own.
+</p>
+<ul class="skills">
+  {% for s in skills %}
+  <li>
+    <a href="{{ url_for('skill', name=s.name) }}"><code>{{ s.name }}</code></a>
+    <span>{{ s.description }}</span>
+  </li>
+  {% endfor %}
+</ul>
+
+<h2>Before you start</h2>
+<ul class="checks">
+  <li><a href="{{ url_for('page', slug='setup') }}">MCP &amp; credentials setup</a> —
+      gcloud, SecOps and GTI. Provision <code>CHRONICLE_*</code> and
+      <code>VT_APIKEY</code> <strong>before</strong> session 1; key provisioning is
+      the most common overrun.</li>
+  <li>Python 3.11+ and <code>uv</code> for the SecOps and GTI servers.</li>
+  <li>For session 4: the ability to create a disposable GCP project and link
+      billing — verify this a week ahead.</li>
+  <li>Facilitators: <a href="{{ url_for('page', slug='facilitator') }}">facilitator guide</a>.</li>
+</ul>
+
+<p class="warn">
+  <strong>Never deploy <code>examples/flawed-agent-app</code>.</strong> It is
+  deliberately exploitable — public bucket, open bastion, SQL-injectable app.
+  You deploy only the fixed Terraform, only into a project you created for the
+  purpose. See the
+  <a href="{{ url_for('page', slug='smoke-test') }}">smoke-test runbook</a>.
+</p>
+
+{% endblock %}

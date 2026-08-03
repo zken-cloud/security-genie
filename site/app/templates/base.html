@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>{% block title %}Security Genie{% endblock %} · Security Genie</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('index') }}"><span class="lamp">🧞</span> Security Genie</a>
+  <div class="who">
+    {% if email %}<span class="email" title="Verified by IAP">{{ email }}</span>{% endif %}
+    <a class="logout" href="{{ url_for('logout') }}">Lock</a>
+  </div>
+</header>
+<div class="shell">
+  {% block sidebar %}
+  <nav class="side" aria-label="Sections">
+    {% for section, items in nav %}
+    <p class="side-h">{{ section }}</p>
+    <ul>
+      {% for slug, title in items %}
+      <li><a href="{{ url_for('page', slug=slug) }}">{{ title }}</a></li>
+      {% endfor %}
+    </ul>
+    {% endfor %}
+  </nav>
+  {% endblock %}
+  <main id="main">{% block content %}{% endblock %}</main>
+</div>
+<footer class="foot">
+  Internal workshop material · Google Cloud CE enablement.
+  Gated by IAP (@google.com) and a shared workshop token.
+  Do not place customer data or secrets on this site.
+</footer>
+</body>
+</html>

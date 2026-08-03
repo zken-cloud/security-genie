@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Not found{% endblock %}
+{% block content %}
+<h1>Not here</h1>
+<p class="lede">That page is not published on this site. It may exist in the repo
+but not in the hub's content map.</p>
+<p><a href="{{ url_for('index') }}">Back to the hub →</a></p>
+{% endblock %}

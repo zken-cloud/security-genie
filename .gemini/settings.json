@@ -1,0 +1,40 @@
+{
+  "mcpServers": {
+    "gcloud": {
+      "command": "npx",
+      "args": ["-y", "@google-cloud/gcloud-mcp"],
+      "env": {
+        "CLOUDSDK_ACTIVE_CONFIG_NAME": "default"
+      }
+    },
+    "secops": {
+      "command": "uvx",
+      "args": ["--from", "google-secops-mcp", "secops_mcp"],
+      "env": {
+        "CHRONICLE_PROJECT_ID": "$CHRONICLE_PROJECT_ID",
+        "CHRONICLE_CUSTOMER_ID": "$CHRONICLE_CUSTOMER_ID",
+        "CHRONICLE_REGION": "$CHRONICLE_REGION"
+      }
+    },
+    "gti": {
+      "command": "uvx",
+      "args": ["--from", "gti-mcp", "gti_mcp"],
+      "env": {
+        "VT_APIKEY": "$VT_APIKEY"
+      }
+    }
+  },
+  "hooks": {
+    "BeforeTool": [
+      {
+        "matcher": "run_shell_command|run_command|Bash|shell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .gemini/hooks/dangerous_command_guard.py"
+          }
+        ]
+      }
+    ]
+  }
+}

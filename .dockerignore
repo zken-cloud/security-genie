@@ -1,0 +1,15 @@
+.git
+.gitignore
+**/__pycache__
+**/*.pyc
+slides
+scripts
+install.sh
+hooks
+.claude
+.gemini
+.codex
+.agents
+.mcp.json
+examples/flawed-agent-app/terraform
+examples/flawed-agent-app/app

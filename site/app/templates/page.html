@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<article class="doc">
+  {{ body|safe }}
+</article>
+<p class="src">Source: <code>{{ source }}</code></p>
+{% endblock %}

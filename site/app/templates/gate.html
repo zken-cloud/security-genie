@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Second gate · Security Genie</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+</head>
+<body class="gate-body">
+<main class="gate-card">
+  <p class="lamp-big">🧞</p>
+  <h1>Security Genie</h1>
+  <p class="sub">Workshop material for Google Cloud customer engineers.</p>
+
+  <ol class="gates">
+    <li class="done">
+      <strong>Gate 1 · Identity-Aware Proxy</strong>
+      <span>{% if email %}Passed as {{ email }}{% else %}Passed{% endif %}</span>
+    </li>
+    <li class="open">
+      <strong>Gate 2 · Workshop token</strong>
+      <span>Ask your facilitator.</span>
+    </li>
+  </ol>
+
+  <form method="post" action="{{ url_for('gate_page') }}">
+    <input type="hidden" name="next" value="{{ next }}">
+    <label for="token">Token</label>
+    <input id="token" name="token" type="password" autocomplete="off"
+           autocapitalize="none" spellcheck="false" autofocus required
+           maxlength="128" placeholder="••••••••••••">
+    {% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
+    <button type="submit">Enter</button>
+  </form>
+
+  <p class="note">
+    IAP proved who you are. This token proves you are in the workshop.
+    Nothing behind it is secret — but keep the link inside Google.
+  </p>
+</main>
+</body>
+</html>

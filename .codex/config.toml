@@ -1,0 +1,30 @@
+# Security Genie — project-level Codex config.
+# Codex loads this for trusted projects; see docs/gcp-setup.md for user-level setup.
+#
+# SECRETS: Codex does not expand ${VAR} in this file (VERIFY for your Codex
+# version). Do not paste a VirusTotal/GTI API key here — this file is committed.
+# Put the secops/gti blocks in ~/.codex/config.toml instead, or export the vars
+# and rely on shell inheritance if your Codex version supports it.
+
+[mcp_servers.gcloud]
+command = "npx"
+args = ["-y", "@google-cloud/gcloud-mcp"]
+
+[mcp_servers.gcloud.env]
+CLOUDSDK_ACTIVE_CONFIG_NAME = "default"
+
+[mcp_servers.secops]
+command = "uvx"
+args = ["--from", "google-secops-mcp", "secops_mcp"]
+
+[mcp_servers.secops.env]
+CHRONICLE_PROJECT_ID = "REPLACE_ME"
+CHRONICLE_CUSTOMER_ID = "REPLACE_ME"
+CHRONICLE_REGION = "us"
+
+# [mcp_servers.gti]
+# command = "uvx"
+# args = ["--from", "gti-mcp", "gti_mcp"]
+#
+# [mcp_servers.gti.env]
+# VT_APIKEY = "..."   # <- never here. Configure GTI in ~/.codex/config.toml.
