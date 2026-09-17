@@ -193,12 +193,12 @@ support agent: Cloud Run, Cloud SQL, HTTP LB, public bucket, bastion).
 | 3 | Upgrade part 2 — customer conversations | 45 | [lab 3](../labs/lab-3-conversation-skills.md) | `security-jargon-translator`, `security-objection-handling`, objection role-play |
 | 4 | Putting the genie to work | 60 | [lab 4](../labs/lab-4-genie-at-work.md) | Flawed architecture → review → fixed IaC → **smoke test in a real project** → **handover pack** |
 
-Business framing to state at the top of each session — it is what the program is
-funded for, and participants engage differently when they hear it:
+Business framing to state at the top of each session — participants engage
+differently when they hear it:
 
-- Sessions 2: *a Platform CE handles a security architecture review and produces
-  sample code without engaging a platform security CE.*
-- Session 3: *a Platform CE handles the customer's security team directly.*
+- Sessions 2: *a platform engineer handles a security architecture review and
+  produces sample code without engaging a platform security specialist.*
+- Session 3: *a platform engineer handles the customer's security team directly.*
 
 Session-specific facilitator notes:
 

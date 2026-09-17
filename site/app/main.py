@@ -1,9 +1,9 @@
-"""Security Genie workshop hub — security-genie.cedemo.app
+"""Security Genie workshop hub — served at https://$SITE_HOST (see site/deploy.sh)
 
 Two gates protect this site:
 
   Gate 1 (IAP)   Identity-Aware Proxy on the load balancer backend, granted only
-                 to domain:google.com. Handled entirely outside this process —
+                 to domain:$IAP_DOMAIN. Handled entirely outside this process —
                  by the time a request arrives here it has already passed IAP.
   Gate 2 (token) The shared workshop token, checked below. IAP proves *who* you
                  are; the token proves you are *in the workshop*.

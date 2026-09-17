@@ -43,7 +43,7 @@ docs/facilitator-guide.md # facilitator guide: skills rationale + deployment
 docs/smoke-test-runbook.md # proving generated IaC deploys, in a disposable project
 docs/handover/            # deployment-guide and architecture doc templates
 examples/flawed-agent-app/ # deliberately insecure GCP architecture for practicing the skills
-site/                     # security-genie.cedemo.app — the workshop hub (Cloud Run + IAP)
+site/                     # the workshop hub (Cloud Run + IAP), served at <SITE_HOST>
 ```
 
 ## Quickstart

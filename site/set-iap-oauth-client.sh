@@ -20,7 +20,7 @@
 # part of the OAuth Admin API is turned down), so it cannot be fetched for you.
 set -euo pipefail
 
-PROJECT="${PROJECT:-zken-genai}"
+PROJECT="${PROJECT:?set PROJECT (GCP project that owns the backend service)}"
 BACKEND="${BACKEND:-security-genie-backend}"
 CLIENT_ID="${1:-}"
 SECRET_FILE="${2:-}"
@@ -50,5 +50,5 @@ echo "Configured. Verify:"
 gcloud compute backend-services describe "$BACKEND" --global --project="$PROJECT" \
   --format='value(iap.enabled,iap.oauth2ClientId)'
 echo
-echo "Now sign in from a browser as a @google.com account. Command-line checks"
+echo "Now sign in from a browser as an account in the IAP-granted domain. Command-line checks"
 echo "cannot catch Error code 11 — only a completed OAuth flow can."

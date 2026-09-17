@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # deploy.sh — build and deploy the Security Genie workshop hub.
 #
-# Reproduces the live deployment of security-genie.cedemo.app end to end:
+# Reproduces the deployment of the hub at https://$SITE_HOST end to end:
 # Cloud Run (LB-only ingress) -> serverless NEG -> backend service with IAP
 # -> HTTPS load balancer with a Google-managed cert -> DNS.
 #
@@ -14,16 +14,21 @@
 #
 # Requires: gcloud authenticated with rights to deploy Cloud Run, manage
 # compute LB resources and IAP in $PROJECT, and edit DNS in $DNS_PROJECT.
+#
+# Environment: PROJECT and SITE_HOST (public hostname of the hub) are always
+# required. With --infra, DNS_ZONE (Cloud DNS zone holding SITE_HOST) and
+# IAP_DOMAIN (domain granted access through IAP) are required too; DNS_PROJECT
+# defaults to PROJECT.
 set -euo pipefail
 
-PROJECT="${PROJECT:-zken-genai}"
+PROJECT="${PROJECT:?set PROJECT (GCP project for Cloud Run, LB and IAP)}"
 REGION="${REGION:-us-central1}"
 NAME="${NAME:-security-genie}"
 SERVICE="${SERVICE:-security-genie-site}"
-DOMAIN="${DOMAIN:-security-genie.cedemo.app}"
-DNS_PROJECT="${DNS_PROJECT:-waap-demo-323809}"
-DNS_ZONE="${DNS_ZONE:-cedemo-app}"
-IAP_DOMAIN="${IAP_DOMAIN:-google.com}"
+SITE_HOST="${SITE_HOST:?set SITE_HOST (public hostname of the hub, e.g. genie.example.com)}"
+DNS_PROJECT="${DNS_PROJECT:-$PROJECT}"
+DNS_ZONE="${DNS_ZONE:-}"            # required with --infra
+IAP_DOMAIN="${IAP_DOMAIN:-}"        # required with --infra, e.g. example.com
 AR_REPO="${AR_REPO:-security-genie}"
 TAG="${TAG:-$(date +%Y%m%d-%H%M%S)}"
 IMAGE="${REGION}-docker.pkg.dev/${PROJECT}/${AR_REPO}/${SERVICE}:${TAG}"
@@ -103,6 +108,9 @@ fi
 # --------------------------------------------------------------------------
 log "Load balancer, certificate, IAP, DNS"
 
+: "${DNS_ZONE:?set DNS_ZONE (Cloud DNS zone in $DNS_PROJECT that holds SITE_HOST)}"
+: "${IAP_DOMAIN:?set IAP_DOMAIN (domain granted access through IAP)}"
+
 have gcloud compute addresses describe "${NAME}-ip" --global --project="$PROJECT" || \
   gcloud compute addresses create "${NAME}-ip" --global --ip-version=IPV4 --project="$PROJECT"
 IP="$(gcloud compute addresses describe "${NAME}-ip" --global --project="$PROJECT" --format='value(address)')"
@@ -121,15 +129,15 @@ fi
 
 # DNS before the certificate: managed certs validate over HTTP against the
 # domain, so provisioning stays stuck until the A record resolves.
-if ! gcloud dns record-sets describe "${DOMAIN}." --type=A --zone="$DNS_ZONE" \
+if ! gcloud dns record-sets describe "${SITE_HOST}." --type=A --zone="$DNS_ZONE" \
       --project="$DNS_PROJECT" >/dev/null 2>&1; then
-  gcloud dns record-sets create "${DOMAIN}." --type=A --ttl=300 \
+  gcloud dns record-sets create "${SITE_HOST}." --type=A --ttl=300 \
     --rrdatas="$IP" --zone="$DNS_ZONE" --project="$DNS_PROJECT"
 fi
 
 have gcloud compute ssl-certificates describe "${NAME}-cert" --global --project="$PROJECT" || \
   gcloud compute ssl-certificates create "${NAME}-cert" --global \
-    --domains="$DOMAIN" --project="$PROJECT"
+    --domains="$SITE_HOST" --project="$PROJECT"
 
 have gcloud compute url-maps describe "${NAME}-urlmap" --global --project="$PROJECT" || \
   gcloud compute url-maps create "${NAME}-urlmap" --default-service="${NAME}-backend" \
@@ -204,7 +212,7 @@ gcloud compute ssl-certificates describe "${NAME}-cert" --global --project="$PRO
   --format='value(managed.status)'
 cat <<EOF
 
-  URL   https://${DOMAIN}
+  URL   https://${SITE_HOST}
   IP    ${IP}
   Gate1 IAP, domain:${IAP_DOMAIN}
   Gate2 workshop token (secret ${NAME}-workshop-token)
